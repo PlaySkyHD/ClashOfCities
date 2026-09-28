@@ -1,0 +1,78 @@
+{
+    "config": {
+        "cityAId": "ulm",
+        "avatarAId": "einstein",
+        "cityBId": "muenster",
+        "avatarBId": "droste",
+        "climateEventId": "normal",
+        "balanceVersion": "balance-8",
+        "seed": 12,
+        "mode": 2,
+        "difficulty": 0
+    },
+    "winnerCityId": "muenster",
+    "outcome": "Knockout",
+    "winnerIndex": 1,
+    "duration": 0.05,
+    "fighterA": {
+        "cityId": "ulm",
+        "avatarId": "einstein",
+        "remainingHealth": 0.0,
+        "damageDealt": 0.0,
+        "healingDone": 0.0,
+        "basicAttacks": 0,
+        "abilitiesUsed": 0,
+        "abilityIds": [
+            "einstein_1",
+            "einstein_2",
+            "einstein_ultimate"
+        ],
+        "abilityCounts": [
+            0,
+            0,
+            0
+        ]
+    },
+    "fighterB": {
+        "cityId": "muenster",
+        "avatarId": "droste",
+        "remainingHealth": 872.0,
+        "damageDealt": 0.0,
+        "healingDone": 0.0,
+        "basicAttacks": 0,
+        "abilitiesUsed": 0,
+        "abilityIds": [
+            "droste_1",
+            "droste_2",
+            "droste_ultimate"
+        ],
+        "abilityCounts": [
+            0,
+            0,
+            0
+        ]
+    },
+    "inputs": [
+        {
+            "tick": 1,
+            "a": {
+                "moveX": 0.0,
+                "moveZ": 0.0,
+                "basicAttack": false,
+                "skill1": false,
+                "skill2": false,
+                "ultimate": false,
+                "dodge": false
+            },
+            "b": {
+                "moveX": 0.0,
+                "moveZ": 0.0,
+                "basicAttack": false,
+                "skill1": false,
+                "skill2": false,
+                "ultimate": false,
+                "dodge": false
+            }
+        }
+    ]
+}

@@ -1,0 +1,56 @@
+{
+    "config": {
+        "cityAId": "muenster",
+        "avatarAId": "droste",
+        "cityBId": "bonn",
+        "avatarBId": "beethoven",
+        "climateEventId": "normal",
+        "balanceVersion": "balance-7",
+        "seed": 726491,
+        "mode": 0,
+        "difficulty": 0
+    },
+    "winnerCityId": "muenster",
+    "outcome": "Knockout",
+    "winnerIndex": 0,
+    "duration": 42.150000000000009,
+    "fighterA": {
+        "cityId": "muenster",
+        "avatarId": "droste",
+        "remainingHealth": 104.43993110586982,
+        "damageDealt": 922.6400000000045,
+        "healingDone": 171.38999999999974,
+        "basicAttacks": 28,
+        "abilitiesUsed": 11,
+        "abilityIds": [
+            "droste_1",
+            "droste_2",
+            "droste_ultimate"
+        ],
+        "abilityCounts": [
+            6,
+            3,
+            2
+        ]
+    },
+    "fighterB": {
+        "cityId": "bonn",
+        "avatarId": "beethoven",
+        "remainingHealth": 0.0,
+        "damageDealt": 938.95006889414,
+        "healingDone": 73.89000000000154,
+        "basicAttacks": 18,
+        "abilitiesUsed": 15,
+        "abilityIds": [
+            "beethoven_1",
+            "beethoven_2",
+            "beethoven_ultimate"
+        ],
+        "abilityCounts": [
+            7,
+            6,
+            2
+        ]
+    },
+    "inputs": []
+}

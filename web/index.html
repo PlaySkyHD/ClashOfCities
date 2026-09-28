@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Clash of Cities</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080f15;color:#e8f0f3;font:15px system-ui,sans-serif;min-height:100vh;display:grid;place-items:center}main{width:min(1280px,100%);padding:12px}header,footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 0}h1{font-size:20px;margin:0}button{border:1px solid #526570;background:#1b333e;color:inherit;padding:9px 18px;border-radius:6px;cursor:pointer}#stage{position:relative;background:#0c151c;aspect-ratio:16/10;max-height:calc(100vh - 135px);margin:auto}canvas{width:100%;height:100%;display:block;outline:none}#loading{position:absolute;inset:0;display:grid;place-content:center;gap:14px;text-align:center;background:#0c151c}progress{width:min(320px,70vw);accent-color:#35cad7}footer{font-size:12px;color:#a8bdc7;flex-wrap:wrap}#error{color:#ffbd9e;white-space:pre-wrap}#stage:fullscreen{width:100vw;height:100vh;max-height:none}a{color:#7fd8e3}
+
+#touch-controls[hidden]{display:none!important}#touch-controls{position:absolute;inset:0;pointer-events:none;z-index:4}#touch-stick{position:absolute;left:max(14px,env(safe-area-inset-left));bottom:18%;width:124px;height:124px;border:2px solid #7fced3aa;border-radius:50%;background:#10263099;touch-action:none;pointer-events:auto;display:grid;place-items:center}#touch-knob{width:48px;height:48px;border-radius:50%;background:#6bdddfbb;border:2px solid #c4ffff}#touch-actions{position:absolute;right:max(14px,env(safe-area-inset-right));bottom:18%;display:grid;grid-template-columns:repeat(3,62px);gap:8px;pointer-events:auto}#touch-actions button,#touch-pause{min-width:54px;min-height:52px;padding:4px;border-radius:12px;background:#0d2536df;border:1px solid #89c2d2;touch-action:none;user-select:none;font-size:11px}#touch-actions strong{display:block;font-size:18px}#touch-actions button.held{background:#277181}#touch-actions .ultimate{border-color:#e4b858}#touch-pause{position:absolute;right:16px;top:26%;pointer-events:auto;min-height:44px}#rotate-hint{display:none}
+@media(pointer:coarse){header,footer{font-size:11px}header h1{font-size:14px}main{padding:4px}button{min-height:44px}}
+@media(max-height:550px) and (orientation:landscape){body{display:block}main{width:100%;padding:0}header,footer{display:none}#stage{width:100vw;height:100dvh;max-height:none;aspect-ratio:auto}#touch-stick{width:100px;height:100px;bottom:22%}#touch-actions{grid-template-columns:repeat(3,54px);gap:5px;bottom:22%}#touch-actions button{min-height:46px}#touch-pause{top:25%}}
+@media(orientation:portrait){body.touch-mode #rotate-hint{display:block;text-align:center;padding:10px;color:#aceaf1}body.touch-mode #touch-stick{width:80px;height:80px;left:5px;bottom:20%}body.touch-mode #touch-actions{grid-template-columns:repeat(3,44px);gap:3px;right:5px;bottom:20%}body.touch-mode #touch-actions button{min-width:44px;min-height:44px}body.touch-mode #touch-pause{top:21%;min-width:44px;min-height:44px}}
+</style></head><body><main>
+<header><h1>CLASH OF CITIES</h1><div><button id="touch-toggle" type="button" aria-pressed="false">Touch aus</button> <button id="fullscreen" type="button">Vollbild</button></div></header><p id="rotate-hint">Für größere Tasten und bessere Sicht: Handy ins Querformat drehen.</p>
+<section id="stage" aria-label="Spielfläche"><canvas id="unity-canvas" width="1280" height="800" tabindex="0" aria-label="Clash of Cities – zum Spielen anklicken"></canvas><div id="touch-controls" hidden>
+<div id="touch-stick" role="group" aria-label="Bewegungsstick"><div id="touch-knob"></div></div>
+<div id="touch-actions">
+<button data-pad="2" aria-label="Skill 1"><strong>X</strong>Skill 1</button><button data-pad="3" aria-label="Skill 2"><strong>Y</strong>Skill 2</button><button data-pad="10" class="ultimate" aria-label="Ulti halten und loslassen"><strong>R</strong>Ulti halten</button>
+<button data-pad="1" aria-label="Ausweichen"><strong>B</strong>Aus-<br>weichen</button><button data-pad="0" aria-label="Angriff halten"><strong>A</strong>Angriff</button><button data-pad="4" aria-label="Skillhilfe"><strong>−</strong>Hilfe</button>
+</div><button id="touch-pause" data-pad="6" aria-label="Pause">Pause</button></div><div id="loading"><strong id="status">Spiel wird geladen …</strong><progress id="progress" max="1" value="0"></progress><div id="error" role="alert"></div></div></section>
+<footer><span>Touch im Querformat · Tastatur oder Controller</span><span>Controller: zuerst eine Taste drücken, dann in der Charakterauswahl wählen.</span></footer>
+</main><script src="touch.js"></script><script>
+var canvas=document.getElementById('unity-canvas');
+var script=document.createElement('script');script.src='Build/Web.loader.js?v=d7a3ee7acf704a81';
+function showError(message){document.getElementById('loading').style.display='grid';document.getElementById('status').textContent='Spiel konnte nicht geladen werden';document.getElementById('error').textContent=message;}
+script.onerror=function(){showError('Die Spieldateien sind nicht erreichbar. Bitte die Seite neu laden.');};
+script.onload=function(){createUnityInstance(canvas,{
+dataUrl:'Build/Web.data.unityweb?v=3eed2ba98dbd8d3f',frameworkUrl:'Build/Web.framework.js.unityweb?v=f5208a35eac183ce',codeUrl:'Build/Web.wasm.unityweb?v=ab472e6769b5a3ad',streamingAssetsUrl:'StreamingAssets',companyName:'ClashOfCities',productName:'Clash of Cities',productVersion:'1.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,matchMedia('(pointer: coarse)').matches?1:1.5)
+},function(progress){document.getElementById('progress').value=progress;}).then(function(instance){window.clashInstance=instance;document.getElementById('loading').style.display='none';canvas.focus();}).catch(function(error){showError(String(error));});};
+document.body.appendChild(script);
+document.getElementById('fullscreen').onclick=function(){var stage=document.getElementById('stage');if(stage.requestFullscreen)stage.requestFullscreen();canvas.focus();};
+canvas.addEventListener('pointerdown',function(){canvas.focus();});
+</script></body></html>

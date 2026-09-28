@@ -1,0 +1,6 @@
+{
+  "name": "ClashOfCities.Presentation",
+  "rootNamespace": "ClashOfCities.Presentation",
+  "references": ["ClashOfCities.Core"],
+  "autoReferenced": true
+}
