@@ -1,0 +1,81 @@
+name: Release game
+run-name: Release ${{ inputs.version }}${{ inputs.dry_run && ' (validation only)' || '' }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Neue Version, z. B. v1.0.0'
+        required: true
+        type: string
+      dry_run:
+        description: 'Nur prüfen und ZIP erzeugen (kein Tag, Release oder Pages-Update)'
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Validate version and package game
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          python3 scripts/package-release.py "$VERSION"
+          if git show-ref --verify --quiet "refs/tags/$VERSION"; then
+            echo "::error::This tag already exists. Choose a new version."
+            exit 1
+          fi
+      - name: Store downloadable game artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ClashOfCities-${{ inputs.version }}-Browser
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30
+      - name: Prepare exact release build for Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: web
+      - name: Create tag and publish release with game download
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          gh release create "$VERSION" \
+            "dist/ClashOfCities-$VERSION-Browser.zip" dist/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" \
+            --title "Clash of Cities $VERSION" \
+            --generate-notes
+      - name: Summarize package
+        env:
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          printf '### Clash of Cities %s\n\nCommit: `%s`\n\nValidation only: %s\n\nBrowser ZIP and SHA256 checksum are available in the workflow artifacts.\n' "$VERSION" "$GITHUB_SHA" "$DRY_RUN" >> "$GITHUB_STEP_SUMMARY"
+  pages:
+    needs: release
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Deploy released game
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -27,3 +27,5 @@ Headless/obj/
 __pycache__/
 !web/Build/
 !web/Build/**
+
+dist/

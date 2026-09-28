@@ -22,7 +22,12 @@ Hosting: **GitHub Pages**, Repository [PlaySkyHD/ClashOfCities](https://github.c
 
 1. Browser-Build mit `./scripts/build-browser.sh` erzeugen. Das Skript exportiert anschließend automatisch die benötigten Dateien nach `web/`.
 2. Nach einem Build über das Unity-Menü stattdessen `python3 scripts/version-browser-assets.py Builds/Web` und `python3 scripts/prepare-pages.py` ausführen.
-3. Quellcode und `web/` auf `main` committen und pushen. Der Workflow `.github/workflows/pages.yml` veröffentlicht ausschließlich `web/`.
+3. Quellcode und `web/` auf `main` committen und pushen.
+4. Unter **Actions → Release game → Run workflow** den Branch `main` wählen und eine neue Version wie `v1.0.0` eingeben. `dry_run` für eine echte Veröffentlichung ausgeschaltet lassen.
+
+Der Workflow prüft den Browser-Build, erstellt ein ZIP mit Startanleitung und SHA256-Prüfsumme, erzeugt Tag und Release am ausgewählten Commit und veröffentlicht danach exakt denselben Build auf GitHub Pages. Das ZIP steht dauerhaft im GitHub-Release und zusätzlich 30 Tage als Actions-Artefakt bereit. Normale Pushes ändern die öffentliche Spielversion nicht mehr.
+
+Mit `dry_run` werden Paket und Pages-Artefakt geprüft/erstellt, ohne Tag, Release oder Website zu verändern. Versionsnummern müssen `vMAJOR.MINOR.PATCH` entsprechen; bestehende Tags werden nicht überschrieben. Falls nur das Pages-Deployment scheitert, im Lauf **Re-run failed jobs** wählen, damit das vorhandene Release nicht erneut erstellt wird.
 
 GitHub Actions veröffentlicht den bereits gebauten WebGL-Player; Unity wird dort nicht neu kompiliert. Dadurch sind keine Unity-Lizenz oder Deployment-Tokens in GitHub nötig. GitHub Pages muss in den Repository-Einstellungen auf **GitHub Actions** stehen. Der Workflow lässt sich auch manuell starten.
 
