@@ -159,3 +159,5 @@ Linker Stick / Steuerkreuz bewegt den goldenen Fokus. **A bestätigt, B geht zur
 ## Online spielen
 
 [Clash of Cities auf GitHub Pages](https://playskyhd.github.io/ClashOfCities/) · [Build und Veröffentlichung](docs/BROWSER.md)
+
+Native Linux-, Windows- und macOS-Downloads werden durch die [Release-Action](https://github.com/PlaySkyHD/ClashOfCities/actions/workflows/release.yml) mitgeliefert. [Build-Anleitung und Plattformhinweise](docs/NATIVE-RELEASES.md).

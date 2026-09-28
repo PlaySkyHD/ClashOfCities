@@ -82,24 +82,34 @@ namespace ClashOfCities.Editor
             Debug.Log("Built browser player: "+output);
         }
         [MenuItem("Clash of Cities/Build Linux Player")]
-        public static void BuildLinux()
+        public static void BuildLinux() => BuildNative(BuildTarget.StandaloneLinux64,"Linux/ClashOfCities.x86_64");
+        [MenuItem("Clash of Cities/Build Windows Player")]
+        public static void BuildWindows() => BuildNative(BuildTarget.StandaloneWindows64,"Windows/ClashOfCities.exe");
+        [MenuItem("Clash of Cities/Build macOS Player")]
+        public static void BuildMacOS() => BuildNative(BuildTarget.StandaloneOSX,"macOS/ClashOfCities.app");
+        static void BuildNative(BuildTarget target,string relativeOutput)
         {
+            if(!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone,target))
+                throw new InvalidOperationException("Unity Build Support fehlt: "+target);
             ValidateSimulation();
             ValidateAudio();
+            PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone,ScriptingImplementation.Mono2x);
+            // Universal macOS player: Intel and Apple Silicon.
+            if(target==BuildTarget.StandaloneOSX)PlayerSettings.SetArchitecture(BuildTargetGroup.Standalone,2);
             var scenes=Array.FindAll(EditorBuildSettings.scenes,s=>s.enabled);
             if(scenes.Length==0) throw new InvalidOperationException("No enabled scene in Build Settings.");
             string output=Environment.GetEnvironmentVariable("CLASH_BUILD_OUTPUT");
-            if(string.IsNullOrEmpty(output)) output="Builds/Linux/ClashOfCities.x86_64";
+            if(string.IsNullOrEmpty(output)) output="Builds/"+relativeOutput;
             var options=new BuildPlayerOptions {
                 scenes=Array.ConvertAll(scenes,s=>s.path),
                 locationPathName=output,
-                target=BuildTarget.StandaloneLinux64,
+                target=target,
                 options=BuildOptions.None
             };
             Directory.CreateDirectory(Path.GetDirectoryName(output));
             var report=BuildPipeline.BuildPlayer(options);
             if(report.summary.result!=BuildResult.Succeeded) throw new InvalidOperationException("Player build failed: "+report.summary.result);
-            Debug.Log("Built offline Linux player: "+options.locationPathName);
+            Debug.Log("Built offline player: "+options.locationPathName);
         }
     }
 }

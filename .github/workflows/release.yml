@@ -31,6 +31,7 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: |
           python3 scripts/package-release.py "$VERSION"
+          python3 scripts/native-release.py export --version "$VERSION"
           if git show-ref --verify --quiet "refs/tags/$VERSION"; then
             echo "::error::This tag already exists. Choose a new version."
             exit 1
@@ -38,7 +39,7 @@ jobs:
       - name: Store downloadable game artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ClashOfCities-${{ inputs.version }}-Browser
+          name: ClashOfCities-${{ inputs.version }}-All-Platforms
           path: dist/*
           if-no-files-found: error
           retention-days: 30
@@ -54,7 +55,7 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: |
           gh release create "$VERSION" \
-            "dist/ClashOfCities-$VERSION-Browser.zip" dist/SHA256SUMS.txt \
+            dist/* \
             --target "$GITHUB_SHA" \
             --title "Clash of Cities $VERSION" \
             --generate-notes
@@ -63,7 +64,7 @@ jobs:
           VERSION: ${{ inputs.version }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          printf '### Clash of Cities %s\n\nCommit: `%s`\n\nValidation only: %s\n\nBrowser ZIP and SHA256 checksum are available in the workflow artifacts.\n' "$VERSION" "$GITHUB_SHA" "$DRY_RUN" >> "$GITHUB_STEP_SUMMARY"
+          printf '### Clash of Cities %s\n\nCommit: `%s`\n\nValidation only: %s\n\nBrowser, Linux, Windows, macOS downloads and SHA256 checksums are available in the workflow artifacts.\n' "$VERSION" "$GITHUB_SHA" "$DRY_RUN" >> "$GITHUB_STEP_SUMMARY"
   pages:
     needs: release
     if: ${{ !inputs.dry_run }}

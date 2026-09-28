@@ -1,0 +1,17 @@
+{
+  "source_sha256": "3249745271db3f03691eaa1c294a26d9bec41ef97209d116d89d867251076a4c",
+  "platforms": {
+    "Linux": {
+      "file": "Linux.tar.gz",
+      "sha256": "e7eb4f10ad75380d0375ebacead8013833d4dba9e3670c2a3f9181e155cab538"
+    },
+    "Windows": {
+      "file": "Windows.zip",
+      "sha256": "0be8cf6013789a7fe69bd18c7bb5c0e3f910cb3065bdf7619e0f6f4e833d7a75"
+    },
+    "macOS": {
+      "file": "macOS.tar.gz",
+      "sha256": "9433a0277b416af23d02d1fc4e52ce1fce5c5fff54db69d08de021d48bddadff"
+    }
+  }
+}
